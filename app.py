@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
-import json
-from utills import get_posts_all
+
+from utils import get_posts_all, get_posts_by_user, get_post_by_pk, search_for_posts
 
 app = Flask(__name__)
 
