@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template
 
-from utils import get_posts_all, get_posts_by_user, get_post_by_pk, search_for_posts
+from utils import get_posts_all, get_posts_by_user, get_post_by_pk, search_for_posts, get_comments_by_post_pk, get_posts_by_tag
 
 app = Flask(__name__)
 
@@ -12,20 +12,35 @@ def get_posts():
 
 
 @app.route('/posts/<int:post_id>')
-def posts_view(post_id):
-    pass
-
+def page_post(post_id):
+    post = get_post_by_pk(post_id)
+    comments = get_comments_by_post_pk(post_id)
+    comments_count = len(comments)
+    return render_template('post.html', post=post, comments=comments, comments_count=comments_count)
 
 
 @app.route('/search')
 def search_posts_by_word():
-    pass
+    query = request.args.get('s')
+    if not query or query == '':
+        return "Вы ничего не искали!"
+    posts = search_for_posts(query)
+    posts_count = len(posts)
+
+    return render_template('search.html', posts=posts, posts_count=posts_count, query=query)
 
 
 @app.route('/users/<username>')
 def search_posts_by_username(username):
-    pass
+    posts = get_posts_by_user(username)
+    posts_count = len(posts)
+    return render_template('user-feed.html', posts=posts, posts_count=posts_count, username=username)
 
+
+@app.route('/tag/<tagname>')
+def posts_by_tags(tagname):
+    posts = get_posts_by_tag(tagname)
+    return render_template('tag.html', posts=posts, tagname=tagname)
 
 
 if __name__ == "__main__":

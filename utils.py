@@ -24,7 +24,7 @@ def get_posts_by_user(user_name):
     posts = get_posts_all()
     posts_by_user = []
     for post in posts:
-        if post['poster_mame'] == user_name:
+        if post['poster_name'] == user_name:
             posts_by_user.append(post)
 
     return posts_by_user
@@ -33,8 +33,8 @@ def get_posts_by_user(user_name):
 def search_for_posts(query):
     """
     Возвращает список словарей по вхождению query
-    :param query:
-    :return:
+    :param query: поисковое слово
+    :return: список постов, куда входит это слово
     """
     posts = get_posts_all()
     posts_match = []
@@ -57,3 +57,43 @@ def get_post_by_pk(pk):
     for post in posts:
         if post['pk'] == pk:
             return post
+
+
+def get_comments_all():
+    """
+    Возвращает все комментарии всех пользователей
+    :return: список комментариев
+    """
+    with open('data/comments.json', "r", encoding="utf-8") as f:
+        comments = json.load(f)
+
+    if comments:
+        return comments
+    else:
+        return []
+
+
+def get_comments_by_post_pk(pk):
+    """
+    Возвращает список комментариев определенного пользователя
+    :param pk: идентификатор пользователя
+    :return: список комментариев этого пользователя
+    """
+    comments = get_comments_all()
+    comments_by_pk = []
+    for comment in comments:
+        if comment['post_id'] == pk:
+            comments_by_pk.append(comment)
+
+    return comments_by_pk
+
+
+def get_posts_by_tag(tagname):
+    posts = get_posts_all()
+    post_match = []
+    search_object = f'#{tagname}'
+    for post in posts:
+        if search_object in post['content']:
+            post_match.append(post)
+
+    return post_match
