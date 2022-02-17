@@ -43,5 +43,5 @@ def posts_by_tags(tagname):
     return render_template('tag.html', posts=posts, tagname=tagname)
 
 
-if __name__ == "__main__":
-    app.run()
+if __name__ == "__name__":
+    app.run(debug=True)
