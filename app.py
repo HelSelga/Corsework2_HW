@@ -19,13 +19,16 @@ def page_post(post_id):
     return render_template('post.html', post=post, comments=comments, comments_count=comments_count)
 
 
-@app.route('/search')
+@app.route('/search/')
 def search_posts_by_word():
     query = request.args.get('s')
-    if not query or query == '':
-        return "Вы ничего не искали!"
-    posts = search_for_posts(query)
-    posts_count = len(posts)
+    if query:
+        posts = search_for_posts(query)
+        posts_count = len(posts)
+    else:
+        posts = []
+        posts_count = 0
+        query = "empty"
 
     return render_template('search.html', posts=posts, posts_count=posts_count, query=query)
 
